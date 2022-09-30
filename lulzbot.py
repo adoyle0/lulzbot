@@ -22,7 +22,7 @@ import torch
 import asyncio
 
 tokenizer = AutoTokenizer.from_pretrained('microsoft/DialoGPT-large')
-model = AutoModelForCausalLM.from_pretrained('../southpark/output-small')
+model = AutoModelForCausalLM.from_pretrained('../southpark/output-medium')
 
 # Twitter
 import tweepy
