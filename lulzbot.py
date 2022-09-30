@@ -19,6 +19,7 @@ client = discord.Client(activity=discord.Game(name='with myself'))
 import numpy as np
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
+import asyncio
 
 tokenizer = AutoTokenizer.from_pretrained('microsoft/DialoGPT-large')
 model = AutoModelForCausalLM.from_pretrained('../southpark/output-small')
@@ -639,7 +640,6 @@ async def on_message(message):
                 top_p=0.7,
                 temperature=.8
         )
-
             await message.channel.send('{}'.format(tokenizer.decode(bot_output[:,bot_input_ids.shape[-1]:][0], skip_special_tokens=True)))
             return
 
