@@ -1,12 +1,13 @@
-motd ='                                 \n\
- _          _         ____   ___  _     \n\
-| |   _   _| |    ___| __ ) / _ \| |_   \n\
-| |  | | | | |   |_  /  _ \| | | | __|  \n\
-| |__| |_| | |___ / /| |_) | |_| | |_   \n\
-|_____\__,_|_____/___|____/ \___/ \__|  \n\
-'
+motd ='''                              
+ _          _         ____   ___  _    
+| |   _   _| |    ___| __ ) / _ \| |_  
+| |  | | | | |   |_  /  _ \| | | | __| 
+| |__| |_| | |___ / /| |_) | |_| | |_  
+|_____\__,_|_____/___|____/ \___/ \__| 
+'''
 # Discord Bot
 import discord, datetime, time
+import numpy as np
 from fortune import fortune
 from ligma import ligma
 from limericks import limerick
@@ -15,13 +16,41 @@ TOKEN = open('discord_token').read()
 chuck = open('chucknorris').read().split('\n%\n')
 client = discord.Client(activity=discord.Game(name='with myself'))
 
+menu = '''```
+Commands:
+  fortune: tell a fortune
+  chuck: give a Chuck Norris quote
+  ligma: LIGMA BALLS
+  bofa: deez
+  deez: nutz
+  limerick: tell a limerick
+  prost!: prost!
+
+Contribute!
+    https://github.com/adoyle0/lulzbot```'''
+
 # NLP
-import numpy as np
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 
 tokenizer = AutoTokenizer.from_pretrained('microsoft/DialoGPT-large')
 model = AutoModelForCausalLM.from_pretrained('../southpark/output-medium')
+
+def cartman_speak(user_message):
+    new_user_input_ids = tokenizer.encode(user_message + tokenizer.eos_token, return_tensors='pt')
+    bot_output = new_user_input_ids
+    bot_input_ids = torch.cat([new_user_input_ids, bot_output])
+    bot_output = model.generate(
+        bot_input_ids, max_length= 200,
+        pad_token_id=tokenizer.eos_token_id,
+        no_repeat_ngram_size=3,
+        do_sample=True,
+        top_k=100,
+        top_p=0.7,
+        temperature=.8
+    )
+
+    return '{}'.format(tokenizer.decode(bot_output[:,bot_input_ids.shape[-1]:][0], skip_special_tokens=True))
 
 # Twitter
 import tweepy
@@ -35,21 +64,8 @@ access_token_secret = twit_sekrit[4]
 tclient = tweepy.Client(bearer_token,api_key,api_key_secret,access_token,access_token_secret)
 
 def user_tweet(twitter):
-    statuses = tclient.get_users_tweets(44196397, exclude=['replies'], max_results=5)
+    statuses = tclient.get_users_tweets(twitter, exclude=['replies'], max_results=5)
     return statuses[0][0]
-
-menu = '```\n\
-Commands:\n\
-  fortune: tell a fortune\n\
-  chuck: give a Chuck Norris quote\n\
-  ligma: LIGMA BALLS\n\
-  bofa: deez\n\
-  deez: nutz\n\
-  limerick: tell a limerick\n\
-  prost!: prost!\n\
-  \n\
-Contribute!\
-    https://github.com/adoyle0/lulzbot```'
 
 # Init
 @client.event
@@ -69,24 +85,12 @@ async def on_message(message):
 
     if message.channel.name == 'cartman':
         async with message.channel.typing():
-            new_user_input_ids = tokenizer.encode(user_message + tokenizer.eos_token, return_tensors='pt')
-            bot_output = new_user_input_ids
-            bot_input_ids = torch.cat([new_user_input_ids, bot_output])
-            bot_output = model.generate(
-                bot_input_ids, max_length= 200,
-                pad_token_id=tokenizer.eos_token_id,
-                no_repeat_ngram_size=3,
-                do_sample=True,
-                top_k=100,
-                top_p=0.7,
-                temperature=.8
-        )
-            await message.channel.send('{}'.format(tokenizer.decode(bot_output[:,bot_input_ids.shape[-1]:][0], skip_special_tokens=True)))
+            await message.channel.send(cartman_speak(user_message))
             return
 
     if message.channel.name == 'shitposting':
         if user_message.lower().count('musk') > 0:
-            await message.channel.send(user_tweet('elonmusk'))
+            await message.channel.send(user_tweet(44196397))
             return
 
         elif user_message.lower() == 'lulzbot' or user_message == 'ligmabot' or user_message == 'L1gMaB0t' or user_message == 'help':
