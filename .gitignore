@@ -1,2 +1,3 @@
-twit_sekrit
-discord_token
+.sekrit/
+__pycache__/
+*/__pycache__/
