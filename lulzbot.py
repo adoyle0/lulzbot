@@ -23,10 +23,10 @@ import numpy as np
 from fortune import fortune
 from src.twitter import get_tweet
 from src.cartman import cartman_speak
-from src.limericks import limerick
 
-chuck_quotes = open('src/chuck_quotes').read().split('\n%\n')
-ligma_list = open('src/ligma_list').read().split('\n')
+chuck_quotes = open('data/chuck_quotes').read().split('\n%\n')
+ligma_list = open('data/ligma_list').read().split('\n')
+limericks = open('data/limericks').read().split('\n%\n')
 
 def show_menu():
     return menu
@@ -36,6 +36,9 @@ def musk():
 
 def ligma():
     return np.random.choice(ligma_list)
+
+def limerick():
+    return np.random.choice(limericks)
 
 def prost():
     return 'https://tenor.com/view/prost-christoph-waltz-django-bier-zum-wohle-gif-11041516'
