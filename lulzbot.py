@@ -22,11 +22,12 @@ import discord, datetime
 import numpy as np
 from fortune import fortune
 from src.twitter import get_tweet
-from src.cartman import cartman_speak
+#from src.cartman import cartman_speak
 
 chuck_quotes = open('data/chuck_quotes').read().split('\n%\n')
 ligma_list = open('data/ligma_list').read().split('\n')
 limericks = open('data/limericks').read().split('\n%\n')
+aclist = open('data/aclist').read().split('\n')
 
 def show_menu():
     return menu
@@ -46,6 +47,9 @@ def prost():
 def chuck():
     return np.random.choice(chuck_quotes)
 
+def ac():
+    return np.random.choice(aclist)
+
 message_handler = {'lulzbot': show_menu, # these need to be functions
                       'musk': musk,
                       'deez': ligma,
@@ -57,10 +61,13 @@ message_handler = {'lulzbot': show_menu, # these need to be functions
                     'prost!': prost,
                    'fortune': fortune,
                      'chuck': chuck,
+                        'ac':ac,
                    }
 
 TOKEN = open('.sekrit/discord_token').read()
-client = discord.Client(activity=discord.Game(name='with myself'))
+intents = discord.Intents.default()
+intents.message_content = True
+client = discord.Client(activity=discord.Game(name='with myself'), intents=intents)
 
 @client.event
 async def on_ready():
@@ -79,7 +86,8 @@ async def on_message(message):
 
     elif message.channel.name == 'cartman':
         async with message.channel.typing():
-            await message.channel.send(cartman_speak(user_message))
+            #await message.channel.send(cartman_speak(user_message))
+            await message.channel.send("I'm broken, come back later.")
 
     elif message.channel.name == 'shitposting':
          if user_message in message_handler:
