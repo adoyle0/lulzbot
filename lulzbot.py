@@ -22,7 +22,7 @@ import discord, datetime
 import numpy as np
 from fortune import fortune
 from src.twitter import get_tweet
-#from src.cartman import cartman_speak
+from src.cartman import cartman_speak
 
 chuck_quotes = open('data/chuck_quotes').read().split('\n%\n')
 ligma_list = open('data/ligma_list').read().split('\n')
@@ -86,12 +86,12 @@ async def on_message(message):
 
     elif message.channel.name == 'cartman':
         async with message.channel.typing():
-            #await message.channel.send(cartman_speak(user_message))
-            await message.channel.send("I'm broken, come back later.")
+            await message.channel.send(cartman_speak(user_message))
+            #await message.channel.send("I'm broken, come back later.")
 
     elif message.channel.name == 'shitposting':
-         if user_message in message_handler:
-            await message.channel.send(message_handler[user_message]())
+         if user_message.lower() in message_handler:
+            await message.channel.send(message_handler[user_message.lower()]())
     return
 
 client.run(TOKEN)

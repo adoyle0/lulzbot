@@ -2,8 +2,11 @@ from transformers.models.auto.tokenization_auto import AutoTokenizer
 from transformers.models.auto.modeling_auto import AutoModelForCausalLM
 import torch
 
-tokenizer = AutoTokenizer.from_pretrained('microsoft/DialoGPT-large')
-model = AutoModelForCausalLM.from_pretrained('../southpark/output-medium')
+#tokenizer = AutoTokenizer.from_pretrained('microsoft/DialoGPT-large')
+#model = AutoModelForCausalLM.from_pretrained('../southpark/output-medium')
+
+tokenizer = AutoTokenizer.from_pretrained('google/flan-t5-xxl')
+model = AutoModelForCausalLM.from_pretrained('google/flan-t5-xxl')
 
 def cartman_speak(user_message):
     new_user_input_ids = tokenizer.encode(user_message + tokenizer.eos_token, return_tensors='pt')
