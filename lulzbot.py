@@ -23,6 +23,7 @@ import numpy as np
 from fortune import fortune
 from src.twitter import get_tweet
 from src.cartman import cartman_speak
+from src.flan import flan_speak
 
 chuck_quotes = open('data/chuck_quotes').read().split('\n%\n')
 ligma_list = open('data/ligma_list').read().split('\n')
@@ -50,23 +51,23 @@ def chuck():
 def ac():
     return np.random.choice(aclist)
 
-message_handler = {'lulzbot': show_menu, # these need to be functions
-                      'musk': musk,
-                      'deez': ligma,
-                     'ligma': ligma,
-                      'bofa': ligma,
-                     'bopha': ligma,
-                  'limerick': limerick,
-                   'limrick': limerick,
-                    'prost!': prost,
-                   'fortune': fortune,
-                     'chuck': chuck,
-                        'ac':ac,
-                   }
+triggers = {'lulzbot': show_menu, # these need to be functions
+            'musk': musk,
+            'deez': ligma,
+            'ligma': ligma,
+            'bofa': ligma,
+            'bopha': ligma,
+            'limerick': limerick,
+            'limrick': limerick,
+            'prost!': prost,
+            'fortune': fortune,
+            'chuck': chuck,
+            'ac': ac,
+           }
 
 TOKEN = open('.sekrit/discord_token').read()
 intents = discord.Intents.default()
-intents.message_content = True
+# intents.message_content = True
 client = discord.Client(activity=discord.Game(name='with myself'), intents=intents)
 
 @client.event
@@ -85,13 +86,16 @@ async def on_message(message):
         return
 
     elif message.channel.name == 'cartman':
-        async with message.channel.typing():
-            await message.channel.send(cartman_speak(user_message))
-            #await message.channel.send("I'm broken, come back later.")
+        await message.channel.send(cartman_speak(user_message))
+        #await message.channel.send("I'm broken, come back later.")
+
+    elif message.channel.name == 'flan':
+         await message.channel.send(flan_speak(user_message))
+       # await message.channel.send('GPU is busy, come back later')
 
     elif message.channel.name == 'shitposting':
-         if user_message.lower() in message_handler:
-            await message.channel.send(message_handler[user_message.lower()]())
+         if user_message.lower() in triggers:
+            await message.channel.send(triggers[user_message.lower()]())
     return
 
 client.run(TOKEN)
