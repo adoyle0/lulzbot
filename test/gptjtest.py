@@ -1,10 +1,9 @@
 import torch
-from transformers.models.t5.tokenization_t5 import T5Tokenizer 
-from transformers.models.t5.modeling_t5 import T5ForConditionalGeneration
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
 device = torch.device("cuda")
-tokenizer = T5Tokenizer.from_pretrained("google/flan-t5-xl")
-model = T5ForConditionalGeneration.from_pretrained("google/flan-t5-xl").cuda()
+tokenizer = AutoTokenizer.from_pretrained("EleutherAI/gpt-j-6B")
+model = AutoModelForCausalLM.from_pretrained("EleutherAI/gpt-j-6B").cuda()
 
 run = True
 while run:
