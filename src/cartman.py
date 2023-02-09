@@ -12,7 +12,7 @@ from transformers.models.auto.modeling_auto import AutoModelForCausalLM
 from transformers.models.auto.tokenization_auto import AutoTokenizer
 
 tokenizer = AutoTokenizer.from_pretrained("microsoft/DialoGPT-large")
-model = AutoModelForCausalLM.from_pretrained("../chatbots/southpark/cartman/models/output-medium")
+model = AutoModelForCausalLM.from_pretrained("../cartman/train/cartman/models/output-medium")
 
 def cartman_speak(input_text):
     input_ids = tokenizer(input_text + tokenizer.eos_token, return_tensors="pt").input_ids
