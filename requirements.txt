@@ -1,0 +1,6 @@
+discord
+numpy
+fortune-python
+tweepy
+transformers
+torch
