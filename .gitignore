@@ -1,5 +1,7 @@
 .sekrit
+pyvenv.cfg
+
 __pycache__
 bin/
 lib/
-pyvenv.cfg
+share/
