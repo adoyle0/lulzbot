@@ -4,3 +4,4 @@ fortune-python
 tweepy
 transformers
 torch
+bitsandbytes
